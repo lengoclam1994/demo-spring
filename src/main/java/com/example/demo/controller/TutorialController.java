@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.util.StringUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @Controller
@@ -34,35 +35,6 @@ public class TutorialController {
         this.tutorialRepository = tutorialRepository;
         this.tutorialMapper = tutorialMapper;
         this.pageUtil = pageUtil;
-    }
-
-    @GetMapping("/tutorials")
-    public String getAll(Model model, @Param("keyword") String keyword,
-                         @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = "5") int size) {
-        try {
-            int currentPage = pageUtil.getCurrentPage(page);
-            int pageSize = pageUtil.getCurrentPageSize(size);
-            Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
-            Page<TutorialDTO> tutorialPage = null;
-            if (StringUtils.isEmptyOrWhitespace(keyword)) {
-                tutorialPage = tutorialRepository.findAll(pageable).map(tutorialMapper::mapToTutorialDTO);
-            } else {
-                tutorialPage = tutorialRepository.findAllByTitleContainingIgnoreCase(keyword, pageable).map(tutorialMapper::mapToTutorialDTO);
-                model.addAttribute("keyword", keyword);
-            }
-            model.addAttribute("tutorialPage", tutorialPage);
-
-            int totalPages = tutorialPage.getTotalPages();
-            if (totalPages > 0) {
-                List<Integer> pageNumbers = pageUtil.getPageNumbers(totalPages);
-                model.addAttribute("pageNumbers", pageNumbers);
-            }
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
-        }
-
-        return "tutorials";
     }
 
     @GetMapping("/tutorials/new")
@@ -133,5 +105,42 @@ public class TutorialController {
         }
 
         return "redirect:/tutorials";
+    }
+
+    @GetMapping("/tutorials")
+    public String getAll(Model model, @Param("keyword") String keyword,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "5") int size) {
+            int currentPage = pageUtil.getCurrentPage(page);
+            int pageSize = pageUtil.getCurrentPageSize(size);
+            Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
+            Page<TutorialDTO> tutorialPage = null;
+            if (StringUtils.isEmptyOrWhitespace(keyword)) {
+                tutorialPage = tutorialRepository.findAll(pageable).map(tutorialMapper::mapToTutorialDTO);
+            } else {
+                tutorialPage = tutorialRepository.findAllByTitleContainingIgnoreCase(keyword, pageable).map(tutorialMapper::mapToTutorialDTO);
+                model.addAttribute("keyword", keyword);
+            }
+            model.addAttribute("tutorialPage", tutorialPage);
+
+            int totalPages = tutorialPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = pageUtil.getPageNumbers(totalPages);
+                model.addAttribute("pageNumbers", pageNumbers);
+            }
+
+            // TODO
+            Object[] ex = tutorialRepository.testMapperObjectToEntity();
+            Tutorial item = new Tutorial();
+            Field[] fields = Tutorial.class.getDeclaredFields();
+            for (int i = 0; i < fields.length; i++) {
+                Field field = fields[i + 1];
+                field.setAccessible(true);
+                System.out.println(field.toString());
+            }
+
+
+
+        return "tutorials";
     }
 }

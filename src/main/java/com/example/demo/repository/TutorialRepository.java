@@ -21,5 +21,8 @@ public interface TutorialRepository extends JpaRepository<Tutorial, Integer> {
 
     @Query("UPDATE Tutorial t SET t.published = :published WHERE t.id = :id")
     @Modifying
-    public void updatePublishedStatus(Integer id, boolean published);
+    void updatePublishedStatus(Integer id, boolean published);
+
+    @Query(value = "Select t.* from tutorial t where id = 1", nativeQuery = true)
+    Object[] testMapperObjectToEntity();
 }
