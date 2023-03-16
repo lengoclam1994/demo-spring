@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("exception", ex);
         modelAndView.addObject("url", request.getRequestURL());
-
+        ex.printStackTrace();
         modelAndView.setViewName("error");
         return modelAndView;
     }
@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
         mav.addObject("exception", e);
         mav.addObject("url", req.getRequestURL());
         mav.setViewName(DEFAULT_ERROR_VIEW);
+        e.printStackTrace();
         return mav;
     }
 }

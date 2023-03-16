@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.TutorialCustomDTO;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -13,6 +14,18 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SqlResultSetMapping(
+        name = "TutorialValueMapping",
+        classes = @ConstructorResult(
+                targetClass = TutorialCustomDTO.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Integer.class),
+                        @ColumnResult(name = "title"),
+                        @ColumnResult(name = "level", type = int.class),
+                        @ColumnResult(name = "description"),
+                        @ColumnResult(name = "published", type = boolean.class),
+                        @ColumnResult(name = "author_name")
+                }))
 public class Tutorial {
 
     @Id
