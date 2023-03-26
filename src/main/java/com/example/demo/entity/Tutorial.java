@@ -1,7 +1,10 @@
 package com.example.demo.entity;
 
 import com.example.demo.dto.TutorialCustomDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -9,8 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tutorial")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

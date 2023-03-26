@@ -7,8 +7,9 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface TutorialMapper {
+
     TutorialMapper MAPPER = Mappers.getMapper(TutorialMapper.class);
 
     TutorialDTO mapToTutorialDTO(Tutorial tutorial);

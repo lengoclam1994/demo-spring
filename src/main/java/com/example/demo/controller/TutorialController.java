@@ -28,13 +28,9 @@ public class TutorialController {
 
     private final TutorialMapper tutorialMapper;
 
-    private final PageUtil pageUtil;
-
-    public TutorialController(TutorialRepository tutorialRepository, TutorialMapper tutorialMapper,
-                              PageUtil pageUtil) {
+    public TutorialController(TutorialRepository tutorialRepository, TutorialMapper tutorialMapper) {
         this.tutorialRepository = tutorialRepository;
         this.tutorialMapper = tutorialMapper;
-        this.pageUtil = pageUtil;
     }
 
     @GetMapping("/tutorials/new")
@@ -111,8 +107,8 @@ public class TutorialController {
     public String getAll(Model model, @Param("keyword") String keyword,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "5") int size) {
-        int currentPage = pageUtil.getCurrentPage(page);
-        int pageSize = pageUtil.getCurrentPageSize(size);
+        int currentPage = PageUtil.getCurrentPage(page);
+        int pageSize = PageUtil.getCurrentPageSize(size);
         keyword = "a";
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
         Page<TutorialDTO> tutorialPage = null;
@@ -126,10 +122,15 @@ public class TutorialController {
 
         int totalPages = tutorialPage.getTotalPages();
         if (totalPages > 0) {
-            List<Integer> pageNumbers = pageUtil.getPageNumbers(totalPages);
+            List<Integer> pageNumbers = PageUtil.getPageNumbers(totalPages);
             model.addAttribute("pageNumbers", pageNumbers);
         }
         Page<TutorialCustomDTO> result = tutorialRepository.testCustomPaging(keyword, pageable);
         return "tutorials";
+    }
+
+    @GetMapping("/accessDenied")
+    public String getAccessDeniedPage() {
+        return "access-denied";
     }
 }

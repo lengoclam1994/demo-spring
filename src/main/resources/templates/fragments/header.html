@@ -15,6 +15,9 @@
                     <a class="nav-link" th:href="@{/tutorials/new}">Add</a>
                 </li>
             </ul>
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"><div sec:authentication="principal.username"></div></a></li>
+            </ul>
         </div>
     </nav>
 </header>

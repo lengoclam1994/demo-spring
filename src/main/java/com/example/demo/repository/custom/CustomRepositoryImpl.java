@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.math.BigInteger;
 import java.util.List;
 
 public class CustomRepositoryImpl implements CustomRepository{
